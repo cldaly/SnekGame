@@ -6,6 +6,7 @@ let ctx;
 let food;
 let snek;
 let score;
+let highScore;
 let isPaused;
 let hasChangedDir;
 let interval;
@@ -99,8 +100,10 @@ function initialize() {
     width = 500;
     height = 500;
     tileSize = 10;
+    score = 0;
 
     canvas = document.getElementById("snek-game");
+    document.getElementById("score").innerHTML = score;
 
     canvas.width = width;
     canvas.height = height;
@@ -119,7 +122,6 @@ function game() {
     isPaused = false;
     toggleGame();
 
-    score = 0;
     interval = setInterval(update, 100);
 }
 
@@ -173,9 +175,30 @@ function toggleGame() {
 }
 
 function handleGameOver() {
-    alert("Game Over!!!");
     clearInterval(interval);
-    game();
+    let modal = document.getElementById("snek-modal");
+    let close = document.getElementById("close-modal");
+
+    let modalScore = document.getElementById("modal-score");
+    let modalHighScore = document.getElementById("high-score");
+
+    highScore = (highScore) ? Math.max(score, highScore) : score;
+    
+    modalScore.innerHTML = score;
+    modalHighScore.innerHTML = highScore
+    modal.style.display = "block";
+
+    close.onclick = function() {
+        modal.style.display = "none";
+        game();
+    }
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            game();
+        }
+    }
+    
 }
 
 // Event Listeners
