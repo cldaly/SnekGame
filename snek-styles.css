@@ -2,14 +2,20 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    overflow: hidden;
 }
 body {
     font-family: 'Mali', sans-serif;
-    background-color: #eeeeee;
+    background-color: #f9f9f9;
 }
 .snek {
     margin-top: 10vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.snek-game-area {
+    width: 100%;
+    max-width: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,6 +30,7 @@ body {
     display: flex;
     justify-content: space-between;
     width: 100%;
+    max-width: 500px;
     margin-bottom: 20px;
 }
 #snek-btn {
@@ -64,4 +71,26 @@ body {
 .snek-controls {
     padding-left: 20px;
     font-weight: 200;
+}
+
+@media only screen and (max-width: 500px) {
+    #snek-game {
+        height: 250px;
+        width: 250px;
+    }
+    .snek-title {
+        margin-bottom: 20px;
+        font-size: 2em;
+        letter-spacing: 0em;
+    }
+    #snek-btn {
+        font-size: 1em;
+    }
+    .snek-score {
+        font-size: 1em;
+    }
+    .snek-controls {
+        padding-left: 20px;
+        font-size: 0.9em;
+    }
 }
