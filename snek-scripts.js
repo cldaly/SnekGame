@@ -9,36 +9,7 @@ let score;
 let isPaused;
 let hasChangedDir;
 
-function initialize() {
-    width = 500;
-    height = 500;
-    tileSize = 10;
-
-    canvas = document.getElementById("snek-game");
-
-    canvas.width = width;
-    canvas.height = height;
-
-    ctx = canvas.getContext("2d");
-
-    food = new Food(spawnNewFood());
-    food.draw();
-
-    snek = new Snek({ x: tileSize * Math.floor(width / (2 * tileSize)), y: tileSize * Math.floor(height / (2 * tileSize)) });
-    snek.draw();
-}
-
-function spawnNewFood() {
-    let rows = width / tileSize;
-    let cols = height / tileSize;
-    let xPosition, yPosition;
-
-    xPosition = Math.floor(Math.random() * rows) * tileSize;
-    yPosition = Math.floor(Math.random() * cols) * tileSize;
-
-    return { x: xPosition, y: yPosition };
-}
-
+// Classes
 class Food {
     constructor(position) {
         this.x = position.x;
@@ -57,111 +28,42 @@ class Food {
 }
 
 class Snek {
-    constructor(position) {
-        this.x = position.x;
-        this.y = position.y;
-        this.tail = [{x: position.x - tileSize, y: position.y}, {x: position.x - tileSize * 2, y: position.y}];
-        this.xVelocity = 1;
-        this.yVelocity = 0;
-    }
-
-    draw() {
-        ctx.beginPath();
-        ctx.rect(this.x, this.y, tileSize, tileSize);
-        ctx.fillStyle = "lightgreen";
-        ctx.fill();
-        ctx.strokeStyle = "darkgreen";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.closePath();
-
-        for (let t of this.tail) {
-            ctx.beginPath();
-            ctx.rect(t.x, t.y, tileSize, tileSize);
-            ctx.fillStyle = "lightgreen";
-            ctx.fill();
-            ctx.strokeStyle = "darkgreen";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-            ctx.closePath();
-        }
-    }
-
-    move() {
-        for (let i = this.tail.length - 1; i > 0; i--) {
-            this.tail[i] = this.tail[i - 1];
-        }
-        this.tail[0] = { x: this.x, y: this.y };
-        this.x += this.xVelocity * tileSize;
-        this.y += this.yVelocity * tileSize;
-    }
-
-    dir(xDirection, yDirection) {
-        this.xVelocity = xDirection;
-        this.yVelocity = yDirection;
-    }
-
-    eat() {
-        if (Math.abs(this.x - food.x) < tileSize && Math.abs(this.y - food.y) < tileSize) {
-            this.tail.push({});
-            increaseScore();
-            return true;
-        }
-        return false;
-    }
-
-    die() {
-        for (var i = 0; i < this.tail.length; i++) {
-            if (Math.abs(this.x - this.tail[i].x) < tileSize && Math.abs(this.y - this.tail[i].y) < tileSize) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    border() {
-        if (this.x + tileSize > width || this.x < 0){
-            alert("GAME OVER!!!");
-            clearInterval(interval);
-            game();
-        } else if (this.y + tileSize > height || this.y < 0) {
-            alert("GAME OVER!!!");
-            clearInterval(interval);
-            game();
-        }
-    }
+    constructor() {}
+    draw() {}
+    move() {}
+    changeDirection() {}
+    eatFood() {}
+    die() {}
+    checkBorder() {}
 }
 
-function game() {
-    initialize();
-    
-    isPaused = false;
-    toggleGame()
+// Functions
+function initialize() {
+    width = 500;
+    height = 500;
+    tileSize = 10;
 
-    score = 0;
-    interval = setInterval(update,100);
+    canvas = document.getElementById("snek-game");
+
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx = canvas.getContext("2d");
 }
 
-function update() {
-    if (isPaused) return;
-    hasChangedDir = false;
+function game() {}
 
-    if (snek.die()) {
-        alert("GAME OVER!!!");
-        game();
-    }
+function update() {}
 
-    snek.border();
+function spawnNewFood() {
+    let rows = width / tileSize;
+    let cols = height / tileSize;
+    let xPosition, yPosition;
 
-    if (snek.eat()) {
-        food = new Food(spawnNewFood(), "red");
-    }
-    
-    ctx.clearRect(0, 0, width, height);
+    xPosition = Math.floor(Math.random() * rows) * tileSize;
+    yPosition = Math.floor(Math.random() * cols) * tileSize;
 
-    food.draw();
-    snek.draw();
-    snek.move();
+    return { x: xPosition, y: yPosition };
 }
 
 function increaseScore() {
@@ -180,6 +82,7 @@ function toggleGame() {
     }
 }
 
+// Event Listeners
 window.addEventListener("keydown", function (event) {
     if (hasChangedDir) return;
     switch (event.key) {
@@ -218,4 +121,5 @@ window.addEventListener("keydown", function (event) {
     }
 });
 
+// Start game
 game();
