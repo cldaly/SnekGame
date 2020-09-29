@@ -5,13 +5,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Snek Game</title>
 	<link rel="stylesheet" href="./snek-styles.css">
-	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;500&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Mali:wght@200;300&display=swap" rel="stylesheet">
 </head>
 <body>
 	<div class="snek">
 		<h1 class="snek-title">Snek</h1>
 		<div class="snek-game-area">
-			<div class="snek-score"></div>
+			<div class="snek-tool-bar">
+				<button id="snek-btn" type="button" onclick="toggleGame()">Start Game!</button>
+				<div class="snek-score">Score: <span id="score">0</span></div>
+			</div>
+			
 			<canvas id="snek-game"></canvas>
 		</div>
 	</div>
