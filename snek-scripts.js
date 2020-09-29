@@ -120,13 +120,11 @@ class Snek {
     }
 
     border() {
-        if (this.x + tileSize > width && this.xVelocity != -1 || this.x < 0 && this.xVelocity != 1){
-            // this.x = width - this.x;
+        if (this.x + tileSize > width || this.x < 0){
             alert("GAME OVER!!!");
             clearInterval(interval);
             game();
-        } else if (this.y + tileSize > height && this.yVelocity != -1 || this.yVelocity != 1 && this.y < 0) {
-            // this.y = height - this.y;
+        } else if (this.y + tileSize > height || this.y < 0) {
             alert("GAME OVER!!!");
             clearInterval(interval);
             game();
