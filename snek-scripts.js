@@ -7,6 +7,7 @@ let food;
 let snek;
 let score;
 let isPaused;
+let hasChangedDir;
 
 function initialize() {
     width = 500;
@@ -20,22 +21,22 @@ function initialize() {
 
     ctx = canvas.getContext("2d");
 
-    food = new Food(spawnLocation());
+    food = new Food(spawnNewFood());
     food.draw();
 
     snek = new Snek({ x: tileSize * Math.floor(width / (2 * tileSize)), y: tileSize * Math.floor(height / (2 * tileSize)) });
     snek.draw();
 }
 
-function spawnLocation() {
+function spawnNewFood() {
     let rows = width / tileSize;
     let cols = height / tileSize;
-    let xPos, yPos;
+    let xPosition, yPosition;
 
-    xPos = Math.floor(Math.random() * rows) * tileSize;
-    yPos = Math.floor(Math.random() * cols) * tileSize;
+    xPosition = Math.floor(Math.random() * rows) * tileSize;
+    yPosition = Math.floor(Math.random() * cols) * tileSize;
 
-    return { x: xPos, y: yPos };
+    return { x: xPosition, y: yPosition };
 }
 
 class Food {
@@ -60,8 +61,8 @@ class Snek {
         this.x = position.x;
         this.y = position.y;
         this.tail = [{x: position.x - tileSize, y: position.y}, {x: position.x - tileSize * 2, y: position.y}];
-        this.velX = 1;
-        this.velY = 0;
+        this.xVelocity = 1;
+        this.yVelocity = 0;
     }
 
     draw() {
@@ -91,13 +92,13 @@ class Snek {
             this.tail[i] = this.tail[i - 1];
         }
         this.tail[0] = { x: this.x, y: this.y };
-        this.x += this.velX * tileSize;
-        this.y += this.velY * tileSize;
+        this.x += this.xVelocity * tileSize;
+        this.y += this.yVelocity * tileSize;
     }
 
-    dir(dirX, dirY) {
-        this.velX = dirX;
-        this.velY = dirY;
+    dir(xDirection, yDirection) {
+        this.xVelocity = xDirection;
+        this.yVelocity = yDirection;
     }
 
     eat() {
@@ -119,12 +120,12 @@ class Snek {
     }
 
     border() {
-        if (this.x + tileSize > width && this.velX != -1 || this.x < 0 && this.velX != 1){
+        if (this.x + tileSize > width && this.xVelocity != -1 || this.x < 0 && this.xVelocity != 1){
             // this.x = width - this.x;
             alert("GAME OVER!!!");
             clearInterval(interval);
             game();
-        } else if (this.y + tileSize > height && this.velY != -1 || this.velY != 1 && this.y < 0) {
+        } else if (this.y + tileSize > height && this.yVelocity != -1 || this.yVelocity != 1 && this.y < 0) {
             // this.y = height - this.y;
             alert("GAME OVER!!!");
             clearInterval(interval);
@@ -145,15 +146,17 @@ function game() {
 
 function update() {
     if (isPaused) return;
+    hasChangedDir = false;
+
     if (snek.die()) {
         alert("GAME OVER!!!");
-        window.location.reload();
+        game();
     }
 
     snek.border();
 
     if (snek.eat()) {
-        food = new Food(spawnLocation(), "red");
+        food = new Food(spawnNewFood(), "red");
     }
     
     ctx.clearRect(0, 0, width, height);
@@ -179,32 +182,42 @@ function toggleGame() {
     }
 }
 
-window.addEventListener("keydown", function (evt) {
-    if (evt.key === " ") {
-        evt.preventDefault();
-        toggleGame();
+window.addEventListener("keydown", function (event) {
+    if (hasChangedDir) return;
+    switch (event.key) {
+        case " ":
+            event.preventDefault();
+            toggleGame();
+            break;
+        case "w":
+            event.preventDefault();
+            if (snek.yVelocity != 1 && snek.x >= 0 && snek.x <= width && snek.y >= 0 && snek.y <= height) {
+                snek.dir(0, -1);
+                hasChangedDir = true;
+            }
+            break;
+        case "s":
+            event.preventDefault();
+            if (snek.yVelocity != -1 && snek.x >= 0 && snek.x <= width && snek.y >= 0 && snek.y <= height) {
+                snek.dir(0, 1);
+                hasChangedDir = true;
+            }
+            break;
+        case "a":
+            event.preventDefault();
+            if (snek.xVelocity != 1 && snek.x >= 0 && snek.x <= width && snek.y >= 0 && snek.y <= height) {
+                snek.dir(-1, 0);
+                hasChangedDir = true;
+            }
+            break;
+        case "d":
+            event.preventDefault();
+            if (snek.xVelocity != -1 && snek.x >= 0 && snek.x <= width && snek.y >= 0 && snek.y <= height) {
+                snek.dir(1, 0);
+                hasChangedDir = true;
+            }
+            break;
     }
-    else if (evt.key === "w") {
-        evt.preventDefault();
-        if (snek.velY != 1 && snek.x >= 0 && snek.x <= width && snek.y >= 0 && snek.y <= height)
-            snek.dir(0, -1);
-    }
-    else if (evt.key === "s") {
-        evt.preventDefault();
-        if (snek.velY != -1 && snek.x >= 0 && snek.x <= width && snek.y >= 0 && snek.y <= height)
-            snek.dir(0, 1);
-    }
-    else if (evt.key === "a") {
-        evt.preventDefault();
-        if (snek.velX != 1 && snek.x >= 0 && snek.x <= width && snek.y >= 0 && snek.y <= height)
-            snek.dir(-1, 0);
-    }
-    else if (evt.key === "d") {
-        evt.preventDefault();
-        if (snek.velX != -1 && snek.x >= 0 && snek.x <= width && snek.y >= 0 && snek.y <= height)
-            snek.dir(1, 0);
-    }
-
 });
 
 game();
