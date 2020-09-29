@@ -5,7 +5,7 @@
 }
 body {
     font-family: 'Mali', sans-serif;
-    background-color: #f9f9f9;
+    background-color: #ebf0f5;
 }
 .snek {
     margin-top: 10vh;
@@ -35,6 +35,7 @@ body {
 }
 #snek-btn {
     font-family: 'Mali', sans-serif;
+    background-color: #d4dde6;
     font-weight: 200;
     font-size: 1.6em;
     padding: 4px 6px;
@@ -43,7 +44,7 @@ body {
 }
 #snek-btn:hover {
     cursor: pointer;
-    background-color: #dddddd;
+    background-color: #b4cde2;
 }
 #snek-btn:focus {
     outline: none;
@@ -111,15 +112,18 @@ body {
 }
 .modal-title {
     font-weight: 300;
-    font-size: 1.2em;
+    font-size: 1.6em;
     text-align: center;
     padding: 4px 0;
 }
 #modal-text {
-    margin: 0 auto;
+    margin: 0;
+    font-size: 1.2em;
     font-weight: 200;
 }
-
+#modal-text > div {
+    margin-top: 4px;
+}
 
 /* Responsive  */
 
