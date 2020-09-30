@@ -124,7 +124,7 @@ function game() {
     isPaused = false;
     toggleGame();
 
-    interval = setInterval(update, 100);
+    interval = setInterval(update, 80);
 }
 
 function update() {
