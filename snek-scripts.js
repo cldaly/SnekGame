@@ -200,7 +200,6 @@ function handleGameOver() {
         game();
     }
     window.onclick = function(event) {
-        console.log("Click");
         if (event.target == modal) {
             modal.style.display = "none";
             game();
