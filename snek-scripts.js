@@ -10,6 +10,7 @@ let highScore;
 let isPaused;
 let hasChangedDir;
 let interval;
+let gameOver;
 
 // Classes
 class Food {
@@ -97,6 +98,7 @@ class Snek {
 
 // Functions
 function initialize() {
+    gameOver = false;
     width = 500;
     height = 500;
     tileSize = 10;
@@ -110,11 +112,11 @@ function initialize() {
 
     ctx = canvas.getContext("2d");
 
-    food = new Food(spawnNewFood());
-    food.draw();
-
     snek = new Snek();
     snek.draw();
+
+    food = new Food(spawnNewFood());
+    food.draw();
 }
 
 function game() {
@@ -151,11 +153,15 @@ function spawnNewFood() {
     let rows = width / tileSize;
     let cols = height / tileSize;
     let xPos, yPos;
+    let newPos;
 
-    xPos = Math.floor(Math.random() * rows) * tileSize;
-    yPos = Math.floor(Math.random() * cols) * tileSize;
-
-    return { x: xPos, y: yPos };
+    do {
+        xPos = Math.floor(Math.random() * rows) * tileSize;
+        yPos = Math.floor(Math.random() * cols) * tileSize;
+        newPos = { x: xPos, y: yPos };
+    } while (snek.tail.includes(newPos) || (xPos === snek.x && yPos === snek.y) || (food && xPos === food.x && yPos === food.y));
+    
+    return newPos;
 }
 
 function increaseScore() {
@@ -175,6 +181,7 @@ function toggleGame() {
 }
 
 function handleGameOver() {
+    gameOver = true;
     clearInterval(interval);
     let modal = document.getElementById("snek-modal");
     let close = document.getElementById("close-modal");
@@ -193,16 +200,17 @@ function handleGameOver() {
         game();
     }
     window.onclick = function(event) {
+        console.log("Click");
         if (event.target == modal) {
             modal.style.display = "none";
             game();
         }
     }
-    
 }
 
 // Event Listeners
 window.addEventListener("keydown", function (event) {
+    if (gameOver) return;
     if (hasChangedDir) return;
     switch (event.key) {
         case " ":
